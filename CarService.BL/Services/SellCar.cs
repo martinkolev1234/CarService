@@ -2,6 +2,7 @@
 using CarService.DL.Interfaces;
 using CarService.Models.Responses;
 
+
 namespace CarService.BL.Services
 {
     internal class SellCar : ISellCar
@@ -26,7 +27,7 @@ namespace CarService.BL.Services
                 throw new ArgumentException($"Car with ID {carId} not found.");
             }
 
-            var price = car.BasePrice - customer.Discount; 
+            var price = car.BasePrice - customer.Discount; // Logic to determine price goes here
 
             return new SellCarResult
             {

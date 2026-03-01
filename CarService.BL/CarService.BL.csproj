@@ -11,10 +11,6 @@
 		<InternalsVisibleTo Include="CarService.Tests" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <PackageReference Include="FluentAssertions" Version="8.8.0" />
-	</ItemGroup>
-
 
 
 </Project>
