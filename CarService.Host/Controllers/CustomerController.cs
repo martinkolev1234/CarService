@@ -1,18 +1,28 @@
 ﻿using CarService.BL.Interfaces;
 using CarService.Models.Dto;
+using CarService.Models.Requests;
 using FluentValidation;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace CarService.Host.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomersController(ICustomerCrudService customerCrudService, IValidator<Customer> validator) : ControllerBase
+    public class CustomersController : ControllerBase
     {
-        private readonly ICustomerCrudService _customerCrudService = customerCrudService;
-        private IValidator<Customer> _validator = validator;
+        private readonly ICustomerCrudService _customerCrudService;
+        private IValidator<Customer> _validator;
 
-        public object? Id { get; internal set; }
+        public object Id { get; internal set; }
+
+
+        public CustomersController(ICustomerCrudService customerCrudService, IValidator<Customer> validator)
+        {
+            _customerCrudService = customerCrudService;
+            _validator = validator;
+        }
 
         [HttpDelete]
         public IActionResult DeleteCustomer(Guid id)
