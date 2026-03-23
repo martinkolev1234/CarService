@@ -4,12 +4,9 @@ namespace CarService.DL.Interfaces
 {
     public interface ICarRepository
     {
-        void AddCar(Car car);
-
-        void DeleteCar(Guid? id);
-
-        List<Car> GetAllCars();
-
-        Car? GetById(Guid? id);
+        Task AddCar(Car car);
+        Task DeleteCar(Guid? id); 
+        Task<List<Car>> GetAllCars();
+        Task<Car?> GetById(Guid? id);
     }
 }

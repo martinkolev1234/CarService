@@ -1,11 +1,6 @@
 ﻿using CarService.BL.Interfaces;
-using CarService.Models.Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CarService.DL.Interfaces;
+using CarService.Models.Dto;
 
 namespace CarService.BL.Services
 {
@@ -18,24 +13,24 @@ namespace CarService.BL.Services
             _customerRepository = customerRepository;
         }
 
-        public void AddCustomer(Customer customer)
+        public async Task AddCustomer(Customer customer)
         {
-            _customerRepository.AddCustomer(customer);
+            await _customerRepository.AddCustomer(customer);
         }
 
-        public void DeleteCustomer(Guid id)
+        public async Task DeleteCustomer(Guid id)
         {
-            _customerRepository.DeleteCustomer(id);
+            await _customerRepository.DeleteCustomer(id);
         }
 
-        public List<Customer> GetAllCustomers()
+        public async Task<List<Customer>> GetAllCustomers()
         {
-            return _customerRepository.GetAllCustomers();
+            return await _customerRepository.GetAllCustomers();
         }
 
-        public Customer? GetById(Guid id)
+        public async Task<Customer?> GetById(Guid id)
         {
-            return _customerRepository.GetById(id);
+            return await _customerRepository.GetById(id);
         }
     }
 }

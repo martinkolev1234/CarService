@@ -16,12 +16,11 @@ namespace CarService.DL
     AddDataLayer(this IServiceCollection services, IConfiguration configs)
         {
             BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
-            // Register data layer services here
             services
                 .AddHostedService<BackgroundWorker>()
                 .AddHostedService<HostedWorker>()
                 .AddConfigurations(configs)
-                .AddSingleton<ICarRepository, CarLocalRepository>()
+                //.AddSingleton<ICarRepository, CarLocalRepository>()
                 .AddSingleton<ICarRepository, CarMongoRepository>()
                 .AddSingleton<ICustomerRepository, CustomerMongoRepository>();
                 
@@ -30,7 +29,6 @@ namespace CarService.DL
         private static IServiceCollection
             AddConfigurations(this IServiceCollection services, IConfiguration configs) 
         {
-            // Register data layer services here
             services.Configure<MongoDbConfiguration>(configs.GetSection(nameof(MongoDbConfiguration)));
 
             return services;

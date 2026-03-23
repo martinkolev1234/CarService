@@ -1,23 +1,19 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarService.DL.Infrastructure.HostedServices
 {
-    internal class HostedWorker :IHostedService
+    internal class HostedWorker : IHostedService
     {
         private readonly ILogger<HostedWorker> _logger;
+
         public HostedWorker(ILogger<HostedWorker> logger)
         {
             _logger = logger;
         }
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
-
             Task.Run(async () =>
             {
                 while (!cancellationToken.IsCancellationRequested)
@@ -27,9 +23,8 @@ namespace CarService.DL.Infrastructure.HostedServices
                 }
             }, cancellationToken);
 
-            return Task.CompletedTask; 
+            return Task.CompletedTask;
         }
-
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
