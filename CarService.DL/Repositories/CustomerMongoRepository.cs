@@ -1,12 +1,9 @@
-﻿using CarService.DL.Interfaces;
-using CarService.Models.Configurations;
-using CarService.Models.Dto;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using CarService.DL.Interfaces;
+using CarService.Models.Configurations;
+using CarService.Models.Dto;
 
 namespace CarService.DL.Repositories
 {
@@ -29,27 +26,27 @@ namespace CarService.DL.Repositories
             _customersCollection = database.GetCollection<Customer>($"{nameof(Customer)}s");
         }
 
-        public void AddCustomer(Customer customer)
+        public async Task AddCustomer(Customer customer)
         {
             if (customer == null) return;
 
             try
             {
-                _customersCollection.InsertOne(customer);
+                await _customersCollection.InsertOneAsync(customer);
             }
             catch (Exception e)
             {
-                _logger.LogError("Error adding Customer to DB: {0} - {1}", e.Message, e.StackTrace);
+                _logger.LogError($"Error adding Customer to DB: {0} - {1}", e.Message, e.StackTrace);
             }
         }
 
-        public void DeleteCustomer(Guid id)
+        public async Task DeleteCustomer(Guid id)
         {
             if (id == Guid.Empty) return;
 
             try
             {
-                var result = _customersCollection.DeleteOne(c => c.Id == id);
+                var result = await _customersCollection.DeleteOneAsync(c => c.Id == id);
 
                 if (result.DeletedCount == 0)
                 {
@@ -62,27 +59,26 @@ namespace CarService.DL.Repositories
             }
         }
 
-        public List<Customer> GetAllCustomers()
+        public async Task<List<Customer>> GetAllCustomers()
         {
             try
             {
-                return _customersCollection.Find(_ => true).ToList();
+                return await _customersCollection.Find(_ => true).ToListAsync();
             }
             catch (Exception e)
             {
                 _logger.LogError($"Error in method {nameof(GetAllCustomers)}: {e.Message} - {e.StackTrace}");
+                return new List<Customer>();
             }
-
-            return new List<Customer>();
         }
 
-        public Customer? GetById(Guid id)
+        public async Task<Customer?> GetById(Guid id)
         {
             if (id == Guid.Empty) return default;
 
             try
             {
-                return _customersCollection.Find(c => c.Id == id).FirstOrDefault();
+                return await _customersCollection.Find(c => c.Id == id).FirstOrDefaultAsync();
             }
             catch (Exception e)
             {

@@ -1,15 +1,12 @@
 ﻿using CarService.Models.Dto;
 
-namespace CarService.BL.Interfaces
+namespace CarService.BL.Interfaces 
 {
     public interface ICarCrudService
     {
-        void AddCar(Car car);
-
-        void DeleteCar(Guid id);
-
-        List<Car> GetAllCars();
-
-        Car? GetById(Guid id);
+        Task AddCar(Car car);
+        Task DeleteCar(Guid id); 
+        Task<List<Car>> GetAllCars();
+        Task<Car?> GetById(Guid id);
     }
 }

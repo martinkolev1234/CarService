@@ -1,10 +1,9 @@
-﻿using CarService.DL.Interfaces;
-using CarService.Models.Configurations;
-using CarService.Models.Dto;
-using DnsClient.Internal;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using CarService.DL.Interfaces;
+using CarService.Models.Configurations;
+using CarService.Models.Dto;
 
 namespace CarService.DL.Repositories
 {
@@ -22,33 +21,32 @@ namespace CarService.DL.Repositories
             _logger = logger;
 
             var client = new MongoClient(_mongoDbConfiguration.CurrentValue.ConnectionString);
-
             var database = client.GetDatabase(_mongoDbConfiguration.CurrentValue.DatabaseName);
 
             _carsCollection = database.GetCollection<Car>($"{nameof(Car)}s");
         }
 
-        public void AddCar(Car car)
+        public async Task AddCar(Car car)
         {
             if (car == null) return;
 
             try
             {
-                _carsCollection.InsertOne(car);
+                await _carsCollection.InsertOneAsync(car);
             }
             catch (Exception e)
             {
-                _logger.LogError("Error adding car to the DB:{0}-{1}", e.Message, e.StackTrace);
+                _logger.LogError($"Error adding car to the DB: {0}-{1}", e.Message, e.StackTrace);
             }
         }
 
-        public void DeleteCar(Guid? id)
+        public async Task DeleteCar(Guid? id)
         {
             if (id == null || id == Guid.Empty) return;
 
             try
             {
-                var result = _carsCollection.DeleteOne(c => c.Id == id);
+                var result = await _carsCollection.DeleteOneAsync(c => c.Id == id);
 
                 if (result.DeletedCount == 0)
                 {
@@ -57,26 +55,34 @@ namespace CarService.DL.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError($"Error in method {nameof(DeleteCar)}:{e.Message}-{e.StackTrace}");
+                _logger.LogError($"Error in method {nameof(DeleteCar)}: {e.Message}-{e.StackTrace}");
             }
         }
 
-        public List<Car> GetAllCars()
+        public async Task<List<Car>> GetAllCars()
         {
-            return _carsCollection.Find(_ => true).ToList();
+            try
+            {
+                return await _carsCollection.Find(_ => true).ToListAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Error in method {nameof(GetAllCars)}: {e.Message}-{e.StackTrace}");
+                return new List<Car>();
+            }
         }
 
-        public Car? GetById(Guid? id)
+        public async Task<Car?> GetById(Guid? id)
         {
             if (id == null || id == Guid.Empty) return default;
 
             try
             {
-                return _carsCollection.Find(c => c.Id == id).FirstOrDefault();
+                return await _carsCollection.Find(c => c.Id == id).FirstOrDefaultAsync();
             }
             catch (Exception e)
             {
-                _logger.LogError($"Error in method {nameof(GetById)}:{e.Message}-{e.StackTrace}");
+                _logger.LogError($"Error in method {nameof(GetById)}: {e.Message}-{e.StackTrace}");
             }
 
             return default;
