@@ -1,10 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "s+f1kAxqcCg=",
+  "dgSpecHash": "baz8MPaG36o=",
   "success": true,
   "projectFilePath": "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.Models\\CarService.Models.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\kolev\\.nuget\\packages\\fluentassertions\\8.8.0\\fluentassertions.8.8.0.nupkg.sha512",
     "C:\\Users\\kolev\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\9.0.0\\microsoft.extensions.configuration.abstractions.9.0.0.nupkg.sha512",
     "C:\\Users\\kolev\\.nuget\\packages\\microsoft.extensions.configuration.binder\\9.0.0\\microsoft.extensions.configuration.binder.9.0.0.nupkg.sha512",
     "C:\\Users\\kolev\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\9.0.11\\microsoft.extensions.dependencyinjection.9.0.11.nupkg.sha512",
