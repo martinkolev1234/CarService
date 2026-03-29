@@ -1,13 +1,12 @@
-﻿using CarService.Models.Configurations;
+﻿using CarService.DL.Interfaces;
+using CarService.Models.Configurations;
 using CarService.Models.Dto;
-using CarService3.DL.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace CarService.DL.Repositories
 {
-    // FIX 1: Renamed this to CustomerMongoRepository to match DependencyInjection
     internal class CustomerMongoRepository : ICustomerRepository
     {
         private readonly IMongoCollection<Customer> _customersCollection;
@@ -27,7 +26,7 @@ namespace CarService.DL.Repositories
             _customersCollection = database.GetCollection<Customer>($"{nameof(Customer)}s");
         }
 
-        public async Task Add(Customer? customer)
+        public async Task AddAsync(Customer? customer)
         {
             if (customer == null) return;
 
@@ -37,18 +36,17 @@ namespace CarService.DL.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError($"Error in {nameof(Add)}:{e.Message}-{e.StackTrace}");
+                _logger.LogError($"Error in {nameof(AddAsync)}: {e.Message}-{e.StackTrace}");
             }
         }
 
-        public async Task<List<Customer>> GetAll()
+        public async Task<List<Customer>> GetAllAsync()
         {
             return await _customersCollection.Find(_ => true).ToListAsync();
         }
 
-        public async Task<Customer?> GetById(Guid id)
+        public async Task<Customer?> GetByIdAsync(Guid id)
         {
-            // FIX 2: Removed 'id == null' because Guids can never be null (fixes CS8073 warning)
             if (id == Guid.Empty) return default;
 
             try
@@ -57,15 +55,14 @@ namespace CarService.DL.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError($"Error in method {nameof(GetById)}:{e.Message}-{e.StackTrace}");
+                _logger.LogError($"Error in method {nameof(GetByIdAsync)}: {e.Message}-{e.StackTrace}");
             }
 
             return default;
         }
 
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            // FIX 3: Removed 'id == null' here too (fixes CS8073 warning)
             if (id == Guid.Empty) return;
 
             try
@@ -79,8 +76,13 @@ namespace CarService.DL.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError($"Error in method {nameof(Delete)}:{e.Message}-{e.StackTrace}");
+                _logger.LogError($"Error in method {nameof(DeleteAsync)}: {e.Message}-{e.StackTrace}");
             }
+        }
+
+        public Task<List<Customer>> GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }

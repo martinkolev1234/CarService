@@ -13,31 +13,36 @@ namespace CarService.BL.Services
             _carRepository = carRepository;
         }
 
-        public void AddCar(Car car)
+        public async Task AddCarAsync(Car car)
         {
             if (car == null) return;
 
-            if(car?.Id == null || car.Id == Guid.Empty)
+            if (car?.Id == null || car.Id == Guid.Empty)
             {
                 car!.Id = Guid.NewGuid();
             }
 
-            _carRepository.AddCar(car);
+            await _carRepository.AddCarAsync(car);
         }
 
-        public void DeleteCar(Guid id)
+        public Task AddCarАsync(Car car)
         {
-            _carRepository.DeleteCar(id);
+            throw new NotImplementedException();
         }
 
-        public List<Car> GetAllCars()
+        public async Task DeleteCarAsync(Guid id)
         {
-            return _carRepository.GetAllCars();
+            await _carRepository.DeleteCarAsync(id);
         }
 
-        public Car? GetById(Guid id)
+        public async Task<List<Car>> GetAllCarsAsync()
         {
-            return _carRepository.GetById(id);
+            return await _carRepository.GetAllCarsAsync();
+        }
+
+        public async Task<Car?> GetByIdAsync(Guid id)
+        {
+            return await _carRepository.GetByIdAsync(id);
         }
     }
 }

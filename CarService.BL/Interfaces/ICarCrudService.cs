@@ -4,12 +4,9 @@ namespace CarService.BL.Interfaces
 {
     public interface ICarCrudService
     {
-        void AddCar(Car car);
-
-        void DeleteCar(Guid id);
-
-        List<Car> GetAllCars();
-
-        Car? GetById(Guid id);
+        Task AddCarАsync(Car car);
+        Task DeleteCarAsync(Guid id);
+        Task<List<Car>> GetAllCarsAsync();
+        Task<Car?> GetByIdAsync(Guid id);
     }
 }

@@ -1,8 +1,6 @@
 ﻿using CarService.BL.Interfaces;
-using CarService3.BL.Services;
-using CarService3.BL.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using CarService.BL.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarService.BL
 {

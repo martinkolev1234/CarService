@@ -2,7 +2,6 @@
 using CarService.DL.Interfaces;
 using CarService.DL.Repositories;
 using CarService.Models.Configurations;
-using CarService3.DL.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
@@ -17,12 +16,11 @@ namespace CarService.DL
     AddDataLayer(this IServiceCollection services, IConfiguration configs)
         {
             BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
-            // Register data layer services here
             services
                 .AddHostedService<BackgroundWorker>()
                 .AddHostedService<HostedWorker>()
                 .AddConfigurations(configs)
-                .AddSingleton<ICarRepository, CarLocalRepository>()
+                //.AddSingleton<ICarRepository, CarLocalRepository>()
                 .AddSingleton<ICarRepository, CarMongoRepository>()
                 .AddSingleton<ICustomerRepository, CustomerMongoRepository>();
                 
