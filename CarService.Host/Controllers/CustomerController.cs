@@ -1,88 +1,105 @@
-﻿using CarService.BL.Interfaces;
-using CarService.Models.Dto;
+﻿using CarService.Models.Dto;
+using CarService.BL.Interfaces;
+using CarService.Host.Validators;
 using CarService.Models.Requests;
 using FluentValidation;
+using MapsterMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+using CarService3.BL.Interfaces;
+using CarService3.Models.Requests;
 
-namespace CarService.Host.Controllers
+namespace CarService3.Host.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomersController : ControllerBase
+    public class CustomerController : ControllerBase
     {
-        private readonly ICustomerCrudService _customerCrudService;
-        private IValidator<Customer> _validator;
+        private readonly ICustomerCrudService _customerService;
+        private readonly ILogger<CustomerController> _logger;
+        private readonly IMapper _mapper;
+        private readonly IValidator<AddCustomerRequest> _validator;
 
-        public object Id { get; internal set; }
-
-
-        public CustomersController(ICustomerCrudService customerCrudService, IValidator<Customer> validator)
+        public CustomerController(
+            ICustomerCrudService customerService,
+            ILogger<CustomerController> logger,
+            IMapper mapper,
+            IValidator<AddCustomerRequest> validator)
         {
-            _customerCrudService = customerCrudService;
+            _customerService = customerService;
+            _logger = logger;
+            _mapper = mapper;
             _validator = validator;
         }
 
-        [HttpDelete]
-        public IActionResult DeleteCustomer(Guid id)
+        [HttpGet(nameof(GetAllCustomers))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> GetAllCustomers()
         {
-            if (id == Guid.Empty)
-            {
-                return BadRequest("ID must be a valid GUID.");
-            }
+            var customers = await _customerService.GetAll();
 
-            var customer = _customerCrudService.GetById(id);
-            if (customer == null)
-            {
-                return NotFound($"Customer with ID {id} not found.");
-            }
+            if (customers.Count == 0) return NoContent();
 
-            _customerCrudService.DeleteCustomer(id);
-            return Ok();
+            return Ok(customers);
         }
 
-        [HttpGet(nameof(GetById))]
-        public IActionResult GetById(Guid id)
+        [HttpGet(nameof(GetCustomerById))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetCustomerById(Guid id)
         {
             if (id == Guid.Empty)
             {
-                return BadRequest("ID must be a valid GUID.");
+                return BadRequest("Id must be greater than zero.");
             }
 
-            var customer = _customerCrudService.GetById(id);
+            var customer = await _customerService.GetById(id);
 
-            if (customer == null)
-            {
-                return NotFound($"Customer with ID {id} not found.");
-            }
+            if (customer == null) return NotFound();
 
             return Ok(customer);
         }
 
-        [HttpGet(nameof(GetAll))]
-        public IActionResult GetAll()
+        [HttpPost(nameof(AddCustomer))]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AddCustomer([FromBody] AddCustomerRequest? request)
         {
-            var customers = _customerCrudService.GetAllCustomers();
-            return Ok(customers);
+            if (request == null)
+            {
+                return BadRequest("Customer cannot be null.");
+            }
+
+            var validationResult = await _validator.ValidateAsync(request);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
+            var customer = _mapper.Map<Customer>(request);
+
+            if (customer == null) return BadRequest("Mapping failed.");
+
+            _ = _customerService.Add(customer);
+
+            return Ok();
         }
 
-        [HttpPost]
-        public IActionResult AddCustomer([FromBody] Customer? customer)
+        [HttpDelete(nameof(DeleteCustomer))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteCustomer(Guid id)
         {
-            if (customer == null)
+            if (id == Guid.Empty)
             {
-                return BadRequest("Customer data is null.");
+                return BadRequest("Id must be greater than zero.");
             }
 
-            var result = _validator.Validate(customer);
+            await _customerService.Delete(id);
 
-            if (!result.IsValid)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            _customerCrudService.AddCustomer(customer);
             return Ok();
         }
     }

@@ -1,36 +1,42 @@
-﻿using CarService.BL.Interfaces;
-using CarService.DL.Interfaces;
+﻿using CarService.DL.Interfaces;
 using CarService.Models.Dto;
+using CarService3.BL.Interfaces;
+using CarService3.DL.Interfaces;
 
-namespace CarService.BL.Services
+namespace CarService3.BL.Services
 {
-    internal class CustomerCrudService : ICustomerCrudService
+    internal class CustomerService : ICustomerCrudService
     {
         private readonly ICustomerRepository _customerRepository;
 
-        public CustomerCrudService(ICustomerRepository customerRepository)
+        public CustomerService(
+            ICustomerRepository customerRepository)
         {
             _customerRepository = customerRepository;
         }
 
-        public async Task AddCustomer(Customer customer)
+        public async Task Add(Customer? customer)
         {
-            await _customerRepository.AddCustomer(customer);
+            if (customer == null) return;
+
+            customer.Id = Guid.NewGuid();
+
+            await _customerRepository.Add(customer);
         }
 
-        public async Task DeleteCustomer(Guid id)
+        public async Task<List<Customer>> GetAll()
         {
-            await _customerRepository.DeleteCustomer(id);
-        }
-
-        public async Task<List<Customer>> GetAllCustomers()
-        {
-            return await _customerRepository.GetAllCustomers();
+            return await _customerRepository.GetAll();
         }
 
         public async Task<Customer?> GetById(Guid id)
         {
             return await _customerRepository.GetById(id);
+        }
+
+        public async Task Delete(Guid id)
+        {
+            await _customerRepository.Delete(id);
         }
     }
 }
