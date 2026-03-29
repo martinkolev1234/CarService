@@ -1,12 +1,12 @@
 ﻿using CarService.Models.Dto;
 
-namespace CarService3.DL.Interfaces
+namespace CarService.DL.Interfaces
 {
     public interface ICustomerRepository
     {
-        Task Add(Customer? customer);
+        Task AddAsync(Customer? customer);
         Task<List<Customer>> GetAll();
-        Task<Customer?> GetById(Guid id);
-        Task Delete(Guid id);
+        Task<Customer?> GetByIdAsync(Guid id);
+        Task DeleteAsync(Guid id);
     }
 }
