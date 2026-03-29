@@ -1,15 +1,11 @@
-﻿using CarService.Models.Dto;
-using CarService.BL.Interfaces;
-using CarService.Host.Validators;
+﻿using CarService.BL.Interfaces;
+using CarService.Models.Dto;
 using CarService.Models.Requests;
 using FluentValidation;
 using MapsterMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using CarService3.BL.Interfaces;
-using CarService3.Models.Requests;
 
-namespace CarService3.Host.Controllers
+namespace CarService.Host.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -37,7 +33,7 @@ namespace CarService3.Host.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> GetAllCustomers()
         {
-            var customers = await _customerService.GetAll();
+            var customers = await _customerService.GetAllAsync();
 
             if (customers.Count == 0) return NoContent();
 
@@ -55,7 +51,7 @@ namespace CarService3.Host.Controllers
                 return BadRequest("Id must be greater than zero.");
             }
 
-            var customer = await _customerService.GetById(id);
+            var customer = await _customerService.GetByIdAsync(id);
 
             if (customer == null) return NotFound();
 
@@ -83,7 +79,7 @@ namespace CarService3.Host.Controllers
 
             if (customer == null) return BadRequest("Mapping failed.");
 
-            _ = _customerService.Add(customer);
+            await _customerService.AddAsync(customer);
 
             return Ok();
         }
@@ -98,7 +94,7 @@ namespace CarService3.Host.Controllers
                 return BadRequest("Id must be greater than zero.");
             }
 
-            await _customerService.Delete(id);
+            await _customerService.DeleteAsync(id);
 
             return Ok();
         }

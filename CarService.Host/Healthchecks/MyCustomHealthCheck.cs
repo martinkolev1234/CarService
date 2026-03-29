@@ -1,5 +1,4 @@
 ﻿using CarService.Models.Configurations;
-using CarService.Models.Dto;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -15,7 +14,7 @@ namespace CarService.Host.Healthchecks
             _mongoDbConfiguration = mongoDbConfiguration;
         }
 
-        public Task<HealthCheckResult> CheckHealthAsync(
+        public async Task<HealthCheckResult> CheckHealthAsync(
             HealthCheckContext context,
             CancellationToken cancellationToken = default)
         {
@@ -23,11 +22,10 @@ namespace CarService.Host.Healthchecks
 
             try
             {
-                var client = new MongoClient(_mongoDbConfiguration.CurrentValue.ConnectionString);
-                var database = client.GetDatabase(_mongoDbConfiguration.CurrentValue.DatabaseName);
-                //var carsCollection = database.GetCollection<Car>($"{nameof(Car)}s");
+                var client = new MongoClient(_mongoDbConfiguration?.CurrentValue.ConnectionString);
+                var database = client.GetDatabase(_mongoDbConfiguration?.CurrentValue.DatabaseName);
 
-                database.RunCommandAsync((Command<MongoDB.Bson.BsonDocument>)"{ping:1}").Wait(cancellationToken);
+                await database.RunCommandAsync((Command<MongoDB.Bson.BsonDocument>)"{ping:1}", cancellationToken: cancellationToken);
                 isHealthy = true;
             }
             catch (Exception)
@@ -35,16 +33,13 @@ namespace CarService.Host.Healthchecks
                 isHealthy = false;
             }
 
-
             if (isHealthy)
             {
-                return Task.FromResult(
-                    HealthCheckResult.Healthy("MongoDB is healthy."));
+                return HealthCheckResult.Healthy("MongoDB is healthy.");
             }
 
-            return Task.FromResult(
-                new HealthCheckResult(
-                    context.Registration.FailureStatus, "MongoDB is unhealthy."));
+            return new HealthCheckResult(
+                context.Registration.FailureStatus, "MongoDB is unhealthy.");
         }
     }
 }
