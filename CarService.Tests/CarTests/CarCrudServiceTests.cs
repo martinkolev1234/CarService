@@ -1,8 +1,13 @@
-﻿using CarService.BL.Services;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks; 
+using CarService.BL.Interfaces;
+using CarService.BL.Services;
 using CarService.DL.Interfaces;
 using CarService.Models.Dto;
 using CarService.Tests.MockData;
 using Moq;
+using Xunit;
 
 namespace CarService.Tests.CarTests
 {
@@ -28,16 +33,16 @@ namespace CarService.Tests.CarTests
             };
 
             _carRepositoryMock
-                .Setup(repo => repo.AddCarAsync(car))
-                .Returns(Task.CompletedTask) 
-                .Callback(() =>
-                {
-                    CarMockedData.Cars.Add(car);
-                });
+               .Setup(repo => repo.AddCarAsync(car)) 
+               .Callback(() =>
+               {
+                   CarMockedData.Cars.Add(car);
+               })
+               .Returns(Task.CompletedTask); 
 
             var service = new CarCrudService(_carRepositoryMock.Object);
 
-            await service.AddCarAsync(car);
+            await service.AddCarAsync(car); 
 
             var resultCar = CarMockedData.Cars.FirstOrDefault(c => c.Id == id);
 

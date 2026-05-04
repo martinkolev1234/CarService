@@ -1,6 +1,9 @@
-﻿using CarService.BL.Interfaces;
+﻿using System;
+using System.Threading.Tasks;
+using CarService.BL.Interfaces;
 using CarService.DL.Interfaces;
 using CarService.Models.Responses;
+using CarService3.DL.Interfaces;
 
 namespace CarService.BL.Services
 {
@@ -15,15 +18,16 @@ namespace CarService.BL.Services
             _customerRepository = customerRepository;
         }
 
-        public async Task<SellCarResult> SellAsync(Guid carId, Guid customerId)
+        public async Task<SellCarResult> Sell(Guid carId, Guid customerId)
         {
+
             var car = await _carCrudService.GetByIdAsync(carId);
 
-            var customer = await _customerRepository.GetByIdAsync(customerId);
+            var customer = await _customerRepository.GetById(customerId);
 
             if (car == null || customer == null)
             {
-                throw new ArgumentException("Car or Customer not found.");
+                throw new ArgumentException($"Car or Customer not found.");
             }
 
             var price = car.BasePrice - customer.Discount;
@@ -31,7 +35,7 @@ namespace CarService.BL.Services
             return new SellCarResult
             {
                 Price = price,
-                Car = car,
+                Car = car, 
                 Customer = customer
             };
         }

@@ -10,7 +10,7 @@ namespace CarService.Host.Validators
             RuleFor(x => x.Model)
                 .NotNull()
                 .NotEmpty()
-                .MaximumLength(5).WithMessage("Model cannot exceed 50 characters.")
+                .MaximumLength(50).WithMessage("Model cannot exceed 50 characters.")
                 .MinimumLength(2).WithMessage("Model cannot be below 2 characters.")
                 .WithMessage("Model is required.");
 

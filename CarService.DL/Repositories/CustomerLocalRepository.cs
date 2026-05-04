@@ -1,9 +1,9 @@
-﻿using CarService.DL.Interfaces;
-using CarService.DL.LocalDb;
+﻿using CarService.DL.LocalDb;
 using CarService.Models.Dto;
+using CarService3.DL.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace CarService.DL.Repositories
+namespace CarService3.DL.Repositories
 {
     internal class CustomerStaticRepository : ICustomerRepository
     {
@@ -14,7 +14,7 @@ namespace CarService.DL.Repositories
             _logger = logger;
         }
 
-        public Task AddAsync(Customer? customer)
+        public Task Add(Customer? customer)
         {
             if (customer != null)
             {
@@ -24,7 +24,7 @@ namespace CarService.DL.Repositories
             return Task.CompletedTask;
         }
 
-        public Task<List<Customer>> GetAllAsync()
+        public Task<List<Customer>> GetAll()
         {
             try
             {
@@ -32,13 +32,13 @@ namespace CarService.DL.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError($"Error in {nameof(GetAllAsync)}:{e.Message}-{e.StackTrace}");
+                _logger.LogError($"Error in {nameof(GetAll)}:{e.Message}-{e.StackTrace}");
             }
 
             return Task.FromResult(new List<Customer>());
         }
 
-        public Task<Customer?> GetByIdAsync(Guid id)
+        public Task<Customer?> GetById(Guid id)
         {
             if (id == Guid.Empty) return Task.FromResult<Customer?>(null);
 
@@ -46,21 +46,17 @@ namespace CarService.DL.Repositories
             return Task.FromResult(customer);
         }
 
-        public async Task DeleteAsync(Guid id)
+        // We make this method 'async' so we can 'await' the GetById method
+        public async Task Delete(Guid id)
         {
             if (id == Guid.Empty) return;
 
-            var customer = await GetByIdAsync(id);
+            var customer = await GetById(id);
 
             if (customer != null)
             {
                 StaticDb.Customers.Remove(customer);
             }
-        }
-
-        public Task<List<Customer>> GetAll()
-        {
-            throw new NotImplementedException();
         }
     }
 }
