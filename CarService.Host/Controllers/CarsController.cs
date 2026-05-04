@@ -2,8 +2,11 @@
 using CarService.Models.Dto;
 using CarService.Models.Requests;
 using FluentValidation;
+using FluentValidation.Results;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks; 
 
 namespace CarService.Host.Controllers
 {
@@ -13,7 +16,7 @@ namespace CarService.Host.Controllers
     {
         private readonly ICarCrudService _carCrudService;
         private readonly IMapper _mapper;
-        private readonly IValidator<AddCarRequest> _validator;
+        private IValidator<AddCarRequest> _validator;
 
         public CarsController(
             ICarCrudService carCrudService,
@@ -26,7 +29,7 @@ namespace CarService.Host.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteCarAsync(Guid id)
+        public async Task<IActionResult> DeleteCar(Guid id)
         {
             if (id == Guid.Empty)
             {
@@ -64,6 +67,7 @@ namespace CarService.Host.Controllers
         [HttpGet(nameof(GetAll))]
         public async Task<IActionResult> GetAll()
         {
+
             var cars = await _carCrudService.GetAllCarsAsync();
             return Ok(cars);
         }
@@ -76,7 +80,7 @@ namespace CarService.Host.Controllers
                 return BadRequest("Car data is null.");
             }
 
-            var result = await _validator.ValidateAsync(carRequest);
+            var result = _validator.Validate(carRequest);
 
             if (!result.IsValid)
             {
@@ -85,7 +89,7 @@ namespace CarService.Host.Controllers
 
             var car = _mapper.Map<Car>(carRequest);
 
-            await _carCrudService.AddCarАsync(car);
+            await _carCrudService.AddCarAsync(car);
 
             return Ok();
         }

@@ -1,4 +1,7 @@
-﻿using CarService.BL.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using CarService.BL.Interfaces;
 using CarService.DL.Interfaces;
 using CarService.Models.Dto;
 
@@ -17,17 +20,12 @@ namespace CarService.BL.Services
         {
             if (car == null) return;
 
-            if (car?.Id == null || car.Id == Guid.Empty)
+            if (car.Id == Guid.Empty)
             {
-                car!.Id = Guid.NewGuid();
+                car.Id = Guid.NewGuid();
             }
 
             await _carRepository.AddCarAsync(car);
-        }
-
-        public Task AddCarАsync(Car car)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task DeleteCarAsync(Guid id)

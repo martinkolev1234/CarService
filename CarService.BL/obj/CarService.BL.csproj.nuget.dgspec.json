@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.BL\\CarService.BL.csproj": {}
+    "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.BL\\CarService.BL.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.BL\\CarService.BL.csproj": {
+    "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.BL\\CarService.BL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.BL\\CarService.BL.csproj",
+        "projectUniqueName": "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.BL\\CarService.BL.csproj",
         "projectName": "CarService.BL",
-        "projectPath": "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.BL\\CarService.BL.csproj",
+        "projectPath": "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.BL\\CarService.BL.csproj",
         "packagesPath": "C:\\Users\\kolev\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.BL\\obj\\",
+        "outputPath": "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.BL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -30,10 +30,11 @@
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.DL\\CarService.DL.csproj": {
-                "projectPath": "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.DL\\CarService.DL.csproj"
+              "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.DL\\CarService.DL.csproj": {
+                "projectPath": "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.DL\\CarService.DL.csproj"
               }
             }
           }
@@ -52,7 +53,18 @@
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
+          "dependencies": {
+            "Confluent.Kafka": {
+              "target": "Package",
+              "version": "[2.14.0, )"
+            },
+            "MessagePack": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -69,18 +81,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.DL\\CarService.DL.csproj": {
+    "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.DL\\CarService.DL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.DL\\CarService.DL.csproj",
+        "projectUniqueName": "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.DL\\CarService.DL.csproj",
         "projectName": "CarService.DL",
-        "projectPath": "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.DL\\CarService.DL.csproj",
+        "projectPath": "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.DL\\CarService.DL.csproj",
         "packagesPath": "C:\\Users\\kolev\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.DL\\obj\\",
+        "outputPath": "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.DL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -99,10 +111,11 @@
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.Models\\CarService.Models.csproj": {
-                "projectPath": "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.Models\\CarService.Models.csproj"
+              "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.Models\\CarService.Models.csproj": {
+                "projectPath": "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.Models\\CarService.Models.csproj"
               }
             }
           }
@@ -121,8 +134,17 @@
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
+            "Confluent.Kafka": {
+              "target": "Package",
+              "version": "[2.14.0, )"
+            },
+            "MessagePack": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
             "Microsoft.Extensions.Hosting.Abstractions": {
               "target": "Package",
               "version": "[10.0.3, )"
@@ -152,18 +174,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.Models\\CarService.Models.csproj": {
+    "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.Models\\CarService.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.Models\\CarService.Models.csproj",
+        "projectUniqueName": "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.Models\\CarService.Models.csproj",
         "projectName": "CarService.Models",
-        "projectPath": "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.Models\\CarService.Models.csproj",
+        "projectPath": "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.Models\\CarService.Models.csproj",
         "packagesPath": "C:\\Users\\kolev\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kolev\\Downloads\\CarService-main\\CarService-main\\CarService.Models\\obj\\",
+        "outputPath": "C:\\Users\\kolev\\Downloads\\car_service-main\\car_service-main\\CarService.Host\\CarService.Models\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -182,6 +204,7 @@
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {}
           }
@@ -200,8 +223,17 @@
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
+            "Confluent.Kafka": {
+              "target": "Package",
+              "version": "[2.14.0, )"
+            },
+            "MessagePack": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
             "Microsoft.Extensions.DependencyInjection": {
               "target": "Package",
               "version": "[9.0.11, )"
@@ -231,7 +263,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

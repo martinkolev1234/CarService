@@ -1,5 +1,9 @@
+
 using CarService.BL;
+using CarService.BL.Interfaces;
 using CarService.DL;
+using CarService.DL.Interfaces;
+using CarService.DL.Repositories;
 using CarService.Host.Healthchecks;
 using CarService.Host.Validators;
 using FluentValidation;
@@ -8,6 +12,8 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
+
+
 namespace CarService.Host
 {
     public class Program
@@ -15,13 +21,14 @@ namespace CarService.Host
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(builder.Configuration)
-                .Enrich.FromLogContext()
-                .WriteTo.Console(theme: AnsiConsoleTheme.Code)
-                .CreateLogger();
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.Console(theme: AnsiConsoleTheme.Code)
+    .CreateLogger();
 
+
+            // Add services to the container.
             builder.Services
                 .AddDataLayer(builder.Configuration)
                 .AddBusinessLayer();
@@ -30,13 +37,14 @@ namespace CarService.Host
 
             builder.Services.AddValidatorsFromAssemblyContaining<AddCarRequestValidator>();
 
-            builder.Services.AddControllers();
 
+            builder.Services.AddControllers();
+            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
             builder.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Car Service", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Car Service 2", Version = "v1" });
             });
 
             builder.Host.UseSerilog();
@@ -45,10 +53,12 @@ namespace CarService.Host
                 .AddHealthChecks()
                 .AddCheck<MyCustomHealthCheck>("sample");
 
+
             var app = builder.Build();
 
             app.MapHealthChecks("/healthz");
 
+            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
@@ -60,8 +70,14 @@ namespace CarService.Host
             });
 
             app.UseSwagger();
+
+            //app.UseHttpsRedirection();
+
             app.UseAuthorization();
+
+
             app.MapControllers();
+
             app.Run();
         }
     }

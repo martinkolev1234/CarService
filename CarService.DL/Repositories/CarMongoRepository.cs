@@ -1,4 +1,7 @@
-﻿using CarService.DL.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using CarService.DL.Interfaces;
 using CarService.Models.Configurations;
 using CarService.Models.Dto;
 using Microsoft.Extensions.Logging;
@@ -21,6 +24,7 @@ namespace CarService.DL.Repositories
             _logger = logger;
 
             var client = new MongoClient(_mongoDbConfiguration.CurrentValue.ConnectionString);
+
             var database = client.GetDatabase(_mongoDbConfiguration.CurrentValue.DatabaseName);
 
             _carsCollection = database.GetCollection<Car>($"{nameof(Car)}s");
@@ -36,7 +40,7 @@ namespace CarService.DL.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError("Error adding car to the DB: {0}-{1}", e.Message, e.StackTrace);
+                _logger.LogError("Error adding car to the DB:{0}-{1}", e.Message, e.StackTrace);
             }
         }
 
@@ -55,7 +59,7 @@ namespace CarService.DL.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError($"Error in method {nameof(DeleteCarAsync)}: {e.Message}-{e.StackTrace}");
+                _logger.LogError($"Error in method {nameof(DeleteCarAsync)}:{e.Message}-{e.StackTrace}");
             }
         }
 
@@ -74,7 +78,7 @@ namespace CarService.DL.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError($"Error in method {nameof(GetByIdAsync)}: {e.Message}-{e.StackTrace}");
+                _logger.LogError($"Error in method {nameof(GetByIdAsync)}:{e.Message}-{e.StackTrace}");
             }
 
             return default;
