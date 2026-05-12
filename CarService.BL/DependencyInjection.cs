@@ -1,8 +1,9 @@
 ﻿using CarService.BL.Interfaces;
-using CarService3.BL.Services;
-using CarService3.BL.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using CarService.BL.Services;
+using CarService.DL.Kafka;
+using CarService3.BL.Interfaces;
+using CarService3.BL.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarService.BL
 {
@@ -13,7 +14,6 @@ namespace CarService.BL
             services.AddSingleton<ICarCrudService, CarCrudService>();
             services.AddSingleton<ISellCar, SellCar>();
             services.AddSingleton<ICustomerCrudService, CustomerService>();
-
             return services;
         }
     }

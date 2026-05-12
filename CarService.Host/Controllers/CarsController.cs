@@ -2,11 +2,10 @@
 using CarService.Models.Dto;
 using CarService.Models.Requests;
 using FluentValidation;
-using FluentValidation.Results;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 
 namespace CarService.Host.Controllers
 {
@@ -17,30 +16,39 @@ namespace CarService.Host.Controllers
         private readonly ICarCrudService _carCrudService;
         private readonly IMapper _mapper;
         private IValidator<AddCarRequest> _validator;
+        private readonly ISellCar _sellCar;
 
         public CarsController(
             ICarCrudService carCrudService,
             IMapper mapper,
-            IValidator<AddCarRequest> validator)
+            IValidator<AddCarRequest> validator,
+            ISellCar sellCar)
         {
             _carCrudService = carCrudService;
             _mapper = mapper;
             _validator = validator;
+            _sellCar = sellCar;
+        }
+
+        [HttpPost(nameof(SellCar))]
+        public async Task<IActionResult> SellCar(Guid carId, Guid customerId)
+        {
+            if (carId == Guid.Empty || customerId == Guid.Empty)
+                return BadRequest("IDs must be valid Guids.");
+
+            var result = await _sellCar.Sell(carId, customerId);
+            return Ok(result);
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteCar(Guid id)
         {
             if (id == Guid.Empty)
-            {
                 return BadRequest("ID must be a valid Guid.");
-            }
 
             var car = await _carCrudService.GetByIdAsync(id);
             if (car == null)
-            {
                 return NotFound($"Car with ID {id} not found.");
-            }
 
             await _carCrudService.DeleteCarAsync(id);
             return Ok();
@@ -50,16 +58,11 @@ namespace CarService.Host.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             if (id == Guid.Empty)
-            {
                 return BadRequest("ID must be a valid Guid.");
-            }
 
             var car = await _carCrudService.GetByIdAsync(id);
-
             if (car == null)
-            {
                 return NotFound($"Car with ID {id} not found.");
-            }
 
             return Ok(car);
         }
@@ -67,7 +70,6 @@ namespace CarService.Host.Controllers
         [HttpGet(nameof(GetAll))]
         public async Task<IActionResult> GetAll()
         {
-
             var cars = await _carCrudService.GetAllCarsAsync();
             return Ok(cars);
         }
@@ -76,21 +78,14 @@ namespace CarService.Host.Controllers
         public async Task<IActionResult> AddCar([FromBody] AddCarRequest? carRequest)
         {
             if (carRequest == null)
-            {
                 return BadRequest("Car data is null.");
-            }
 
             var result = _validator.Validate(carRequest);
-
             if (!result.IsValid)
-            {
                 return BadRequest(result.Errors);
-            }
 
             var car = _mapper.Map<Car>(carRequest);
-
             await _carCrudService.AddCarAsync(car);
-
             return Ok();
         }
     }
